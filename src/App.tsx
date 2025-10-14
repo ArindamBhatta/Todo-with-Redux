@@ -1,12 +1,7 @@
 import "./App.css";
-import PasswordGenerator from "./PasswordGenerator";
 
 function App() {
-  return (
-    <div className="">
-      <PasswordGenerator />
-    </div>
-  );
+  return <div className=""></div>;
 }
 
 export default App;
