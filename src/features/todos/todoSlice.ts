@@ -1,23 +1,40 @@
-import { nanoid, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
 import type { Todo } from "./types";
 
-interface TodoState {
-  list: Todo[];
+interface TodosState {
+  todos: Todo[];
 }
 
-const initialState: TodoState = { list: [] };
+const initialState: TodosState = {
+  todos: [{ id: "1", text: "Hello world", completed: false }],
+};
 
-const todoSclice = {
+//Reducers → modify the state when an action is dispatched (e.g. addTodo, removeTodo).
+export const todoSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    addTodo: (state: TodoState, action: PayloadAction<string>) => {
-      state.list.push({ id: nanoid(), text: action.payload, completed: false });
+    addTodo: (state, action: PayloadAction<string>) => {
+      const newTodo = {
+        id: nanoid(),
+        text: action.payload,
+        completed: false,
+      };
+      state.todos.push(newTodo);
     },
-    toggleTodo: (state: TodoState, action: PayloadAction<string>) => {},
+    removeTodo: (state, action: PayloadAction<string>) => {
+      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+    },
+    selectTodos: (state) => {
+      state.todos;
+    },
   },
-};
+});
 
-export const { addTodo, toggleTodo } = todoSclice.action;
+//component use in UI
+export const { addTodo, removeTodo } = todoSlice.actions;
+//knowledge of reducer
+export default todoSlice.reducer;
 
-export default todoSclice.reducer;
+//Selectors → read/derive state, they don’t change anything. They're usually simple functions that live outside the slice.
+export const selectTodos = (state: any) => state.todos.todos;
